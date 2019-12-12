@@ -22,7 +22,6 @@ struct SessionStatusBits {
 struct ovrHmdStruct
 {
 	long long NextFrame;
-	void* HookedFunction;
 
 	// OpenXR handles
 	XrInstance Instance;

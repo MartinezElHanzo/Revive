@@ -4,7 +4,6 @@
 #include "SwapChain.h"
 #include "InputManager.h"
 #include "XR_Math.h"
-#include "MinHook.h"
 
 #include <vector>
 #include <algorithm>
@@ -121,11 +120,6 @@ OVR_PUBLIC_FUNCTION(ovrResult) ovr_CreateTextureSwapChainDX(ovrSession session,
 		HRESULT hr = d3dPtr->QueryInterface(&pDevice);
 		if (FAILED(hr))
 			return ovrError_InvalidParameter;
-
-		// Install a hook on CreateRenderTargetView so we can ensure NULL descriptors keep working on typeless formats
-		// This fixes Echo Arena.
-		MH_CreateHookVirtualEx(pDevice, 9, HookCreateRenderTargetView, (PVOID*)&TrueCreateRenderTargetView, &session->HookedFunction);
-		MH_EnableHook(session->HookedFunction);
 
 		XrGraphicsBindingD3D11KHR graphicsBinding = XR_TYPE(GRAPHICS_BINDING_D3D11_KHR);
 		graphicsBinding.device = pDevice;
